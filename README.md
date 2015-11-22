@@ -8,7 +8,7 @@ Simple MongoDB based job queue using pymongo.
 
 
 #### Jobs
-All jobs should conform to this spec:
+Jobs are added to the queue in the following structure:
 ```
 {
     'created': datetime,
@@ -17,24 +17,37 @@ All jobs should conform to this spec:
     'status': 'string',
     'site': 'string',
     'data': {
-        '_id': ObjectId,    # ObjectId of the document to fetch
-        'op': 'string',     # method to call on the document
-        'parms': 'string'   # parameters to pass to the op
+    # define your own data structure
     }
 }
 ```
+In the `data` dict you will add whatever info your job needs. When running this job queue with a worker, you will supply a custom Job class that will know what to do with this data.
 
 
 ### Useage
+```python
+from pymongo import MongoClient
+from jobqueue import JobQueue
 
-```
->>> from pymongo import MongoClient
->>> from jobqueue import JobQueue
->>> client = MongoClient('localhost', 27017)
->>> db = client.job_queue
->>> jq = JobQueue(db)
-Creating jobqueue collection.
+class Job(object):
 
->>> jq.valid()
-True
+    def __init__ (self, job_data):
+        self.job_data = job_data
+
+    def execute(self):
+        """ Returns the job's message.  """
+        print self.job_data
+        print (self.job_data['data']['message'])
+
+client = MongoClient('localhost', 27017)
+db = client.job_queue
+jobqueue = JobQueue(db)
+if not jobqueue.valid():
+    print ('jobqueue is not configured correctly!')
+    sys.exit(1)
+
+jobqueue.pub('test', {'message': 'hello world!'} ) # add a job
+for j in jobqueue:
+    job = Job(j)
+    job.execute()
 ```
