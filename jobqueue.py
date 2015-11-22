@@ -47,10 +47,8 @@ class JobQueue:
             row['status'] = 'working'
             row['ts']['started'] = datetime.now()
             self.q.save(row)
-            job = Job(row)
-
             try:
-                job.execute()
+                yield row
             except:
                 raise Exception('There are no jobs in the queue')
 
@@ -78,7 +76,7 @@ class JobQueue:
             ts = {'created': datetime.now(), 'started': datetime.now(), 'done':datetime.now()},
             status = 'waiting',
             channel = channel,
-            data=data)
+            data = data)
         print doc
         try:
             self.q.insert(doc, manipulate=False)
@@ -99,16 +97,15 @@ class JobQueue:
                                                     'ts.started':datetime.now()}} )
                     print result
                 except OperationFailure:
-                    print 'Failed!!!!'
+                    print ('Job Failed!!')
                     continue
 
 
-                print '---'
-                print 'I got work'
+                print ('---')
+                print ('Working on job:')
                 print row
 
-                job = Job(row)
-                yield job
+                yield row
 
                 row['status'] = 'done'
                 row['ts']['done'] =  datetime.now()
@@ -116,16 +113,4 @@ class JobQueue:
 
             except:
                 time.sleep(5)
-                print 'waiting!'
-
-
-class Job(object):
-
-    def __init__ (self, job_data):
-        self.job_data = job_data
-
-    def execute(self):
-        """ Returns the job's message. """
-        print self.job_data
-        print '!!!!!!!!'
-        return self.job_data['data']['message']
+                print ('waiting!')
