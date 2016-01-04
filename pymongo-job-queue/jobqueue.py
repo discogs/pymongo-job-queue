@@ -21,8 +21,8 @@ class JobQueue:
         """ Creates a Capped Collection. """
         # TODO - does the size parameter mean number of docs or bytesize?
         try:
-            self.db.create_collection('jobqueue', 
-                                      capped=True, max=100000, 
+            self.db.create_collection('jobqueue',
+                                      capped=True, max=100000,
                                       size=100000, autoIndexId=True)
         except:
             print ('Collection "jobqueue" already created')
@@ -44,17 +44,24 @@ class JobQueue:
                               tailable=True)
         if cursor:
             row = cursor.next()
-            row['status'] = 'working'
+            row['status'] = 'done'
             row['ts']['started'] = datetime.now()
+            row['ts']['done'] = datetime.now()
             self.q.save(row)
             try:
-                yield row
+                return row
             except:
                 raise Exception('There are no jobs in the queue')
 
-            row['status'] = 'done'
-            row['ts']['done'] =  datetime.now()
-            self.q.save(row)
+    def queue_count(self):
+        cursor = self.q.find({'status':'waiting'})
+        if cursor:
+            return cursor.count()
+
+    def clear_queue(self):
+        cursor = self.q.drop()
+        if cursor:
+            return cursor.count()
 
 
     def pub(self, channel, data=None):

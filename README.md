@@ -1,15 +1,16 @@
-# pymongo-jobqueue
-work in progress
+# pymongo-job-queue
 
-Simple MongoDB based job queue using pymongo.
+A simple MongoDB based job queue for pymongo. Using [capped collections](http://docs.mongodb.org/manual/core/capped-collections/) and [tailable cursors](http://docs.mongodb.org/manual/tutorial/create-tailable-cursor/), you can queue up data to be consumed by a service worker.
 
 #### Dependencies
 * pymongo 2.7.2
 
-
+### How It Works
+Capped collections ensure that documents are accessed in the natural order they are inserted into the collection and tailable cursors give us a cursor that will stay open and wait for new documents to process if the job queue is empty, similar to using to the **tail** Unix command with the -f option.
+The **JobQueue** class has a generator
 #### Jobs
 Jobs are added to the queue in the following structure:
-```
+```python
 {
     'created': datetime,
     'started': datetime,
@@ -17,11 +18,11 @@ Jobs are added to the queue in the following structure:
     'status': 'string',
     'site': 'string',
     'data': {
-    # define your own data structure
+        """ Add your job data here! Define whatever structure you want. """
     }
 }
 ```
-In the `data` dict you will add whatever info your job needs. When running this job queue with a worker, you will supply a custom Job class that will know what to do with this data.
+In the `data` dict the `JobQueue.pub` method will add whatever info your job needs. When running the job queue with a worker, the job queue will return a similar looking job that holds your specified data.
 
 
 ### Useage

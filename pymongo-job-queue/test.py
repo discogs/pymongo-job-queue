@@ -6,47 +6,41 @@ host = 'localhost'
 port = 27017
 pair = '%s:%d' % (host, port)
 
-class Job(object):
-
-    def __init__ (self, job_data):
-        self.job_data = job_data
-
-    def execute(self):
-        """ Returns the job's message.  """
-        return (self.job_data['data']['message'])
-
-
 class TestJobQueue(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         client = MongoClient(host, port)
         cls.db = client.pymongo_test
-      
 
     def test_init(self):
         jq = JobQueue(self.db)
         self.assertTrue(jq.valid())
+        jq.clear_queue()
 
     def test_publish(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
         jq.pub('test', job)
-        self.assertTrue(jq.pub('test', job))
+        self.assertEquals(jq.queue_count(), 1)
+        jq.clear_queue()
 
     def test_next(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
+        jq.pub('test', job)
         row = jq.next()
-        for data in row:
-            job = Job(data)
-            result = job.execute()
-            self.assertEquals(result, 'hello world!')
+        self.assertEquals(row['data']['message'], 'hello world!')
+        jq.clear_queue()
 
     def test_iter(self):
         jq = JobQueue(self.db)
+        job = {'message': 'hello world!'}
+        jq.pub('test', job)
         for job in jq:
             if job:
                 self.assertTrue(True, "Found job")
+                jq.clear_queue()
                 return
         self.assertEquals(False, "No jobs found!")
 
