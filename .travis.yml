@@ -5,5 +5,8 @@ services: mongodb
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # # command to run tests
-script: nosetests --with-coverage pymongo-job-queue
+script:
+  - nosetests --with-coverage pymongo_job_queue
+  - coverage combine
+  - coverage report --omit '/usr/local/lib/python2.7/*'
 after_success: codecov
