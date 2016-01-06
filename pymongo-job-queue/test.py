@@ -21,14 +21,14 @@ class TestJobQueue(unittest.TestCase):
     def test_publish(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
-        jq.pub('test', job)
+        jq.pub(job)
         self.assertEquals(jq.queue_count(), 1)
         jq.clear_queue()
 
     def test_next(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
-        jq.pub('test', job)
+        jq.pub(job)
         row = jq.next()
         self.assertEquals(row['data']['message'], 'hello world!')
         jq.clear_queue()
@@ -36,13 +36,14 @@ class TestJobQueue(unittest.TestCase):
     def test_iter(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
-        jq.pub('test', job)
+        jq.pub(job)
         for job in jq:
             if job:
                 self.assertTrue(True, "Found job")
                 jq.clear_queue()
                 return
         self.assertEquals(False, "No jobs found!")
+        jq.clear_queue()
 
 
 if __name__ == '__main__':

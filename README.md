@@ -47,7 +47,7 @@ if not jobqueue.valid():
     print ('jobqueue is not configured correctly!')
     sys.exit(1)
 
-jobqueue.pub('test', {'message': 'hello world!'} ) # add a job
+jobqueue.pub({'message': 'hello world!'}) # add a job to queue
 for j in jobqueue:
     job = Job(j)
     job.execute()

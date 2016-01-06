@@ -64,27 +64,14 @@ class JobQueue:
             return cursor.count()
 
 
-    def pub(self, channel, data=None):
-        """ Publishes a doc to the work queue.
-        All jobs should conform to this spec:
-            {
-                'created': datetime,
-                'started': datetime,
-                'done': datetime,
-                'status': 'string',
-                'data': {
-                    '_id': ObjectId,    # ObjectId of the document to fetch
-                    'op': 'string',     # method to call on the document
-                    'parms': 'string'   # parameters to pass to the op
-                }
-            }
-        """
+    def pub(self, data=None):
+        """ Publishes a doc to the work queue. """
         doc = dict(
-            ts = {'created': datetime.now(), 'started': datetime.now(), 'done':datetime.now()},
+            ts = { 'created': datetime.now(),
+                   'started': datetime.now(),
+                   'done':datetime.now() },
             status = 'waiting',
-            channel = channel,
             data = data)
-        print doc
         try:
             self.q.insert(doc, manipulate=False)
         except:
