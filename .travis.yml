@@ -8,5 +8,5 @@ install: "pip install -r requirements.txt"
 script:
   - nosetests --with-coverage pymongo_job_queue
   - coverage combine
-  - coverage report --omit '/usr/local/lib/python2.7/*'
+  - coverage report --omit '/home/travis/virtualenv/python2.7.9/*'
 after_success: codecov
