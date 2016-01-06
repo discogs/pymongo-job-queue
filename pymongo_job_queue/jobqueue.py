@@ -28,7 +28,7 @@ class JobQueue:
             print ('Collection "jobqueue" already created')
 
     def exists(self):
-        """ Ensures that the jobqueue exists in the DB. """
+        """ Ensures that the jobqueue collection exists in the DB. """
         return 'jobqueue' in self.db.collection_names()
 
     def valid(self):

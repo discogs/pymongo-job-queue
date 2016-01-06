@@ -33,7 +33,7 @@ In the `data` dict the `JobQueue.pub()` method will add whatever info your job n
 
 ```python
 from pymongo import MongoClient
-from jobqueue import JobQueue
+from pymongo_job_queue import JobQueue
 
 class Job(object):
 
