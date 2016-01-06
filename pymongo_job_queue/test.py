@@ -31,8 +31,6 @@ class TestJobQueue(unittest.TestCase):
         job = {'message': 'hello world!'}
         jq.pub(job)
         row = jq.next()
-        row = jq.next()
-        print row
         self.assertEquals(row['data']['message'], 'hello world!')
         jq.clear_queue()
 
