@@ -54,15 +54,14 @@ class JobQueue:
                 raise Exception('There are no jobs in the queue')
 
     def queue_count(self):
+        """ Returns the number of jobs waiting in the queue. """
         cursor = self.q.find({'status':'waiting'})
         if cursor:
             return cursor.count()
 
     def clear_queue(self):
-        cursor = self.q.drop()
-        if cursor:
-            return cursor.count()
-
+        """ Drops the queue collection. """
+        self.q.drop()
 
     def pub(self, data=None):
         """ Publishes a doc to the work queue. """
@@ -79,14 +78,13 @@ class JobQueue:
         return True
 
     def __iter__(self):
-        cursor = self.q.find({'status':'waiting'},
-                              tailable=True)
+        cursor = self.q.find({'status':'waiting'}, tailable=True)
 
         while 1:
             try:
                 row = cursor.next()
                 try:
-                    result = self.q.update({'_id': row['_id'] ,'status':'waiting'},
+                    result = self.q.update({'_id': row['_id'],'status':'waiting'},
                                                     {'$set':{'status':'working',
                                                     'ts.started':datetime.now()}} )
                     print result
