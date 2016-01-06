@@ -6,7 +6,7 @@ services: mongodb
 install: "pip install -r requirements.txt"
 # # command to run tests
 script:
-  - nosetests --with-coverage pymongo_job_queue
+  - nosetests --with-coverage pymjq
   - coverage combine
   - coverage report --omit '/home/travis/virtualenv/python2.7.9/*'
 after_success: codecov
