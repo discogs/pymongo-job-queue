@@ -1,20 +1,22 @@
 # pymongo-job-queue
 
-A simple MongoDB based job queue for pymongo. Using [capped collections](http://docs.mongodb.org/manual/core/capped-collections/) and [tailable cursors](http://docs.mongodb.org/manual/tutorial/create-tailable-cursor/), you can queue up data to be consumed by a service worker.
+A simple MongoDB based job queue for Pymongo. Using capped collections and tailable cursors, you can queue up data to be consumed by a service worker in order to process your long running tasks asynchronously.
 
 #### Dependencies
 * pymongo 2.7.2
 
 ### How It Works
-Capped collections ensure that documents are accessed in the natural order they are inserted into the collection and tailable cursors give us a cursor that will stay open and wait for new documents to process if the job queue is empty, similar to using to the **tail** Unix command with the -f option.
-The **JobQueue** class has a generator
+[Capped collections](http://docs.mongodb.org/manual/core/capped-collections/) ensure that documents are accessed in the natural order they are inserted into the collection and [tailable cursors](http://docs.mongodb.org/manual/tutorial/create-tailable-cursor/) give us a cursor that will stay open and wait for new documents to process if the job queue is empty, similar to using to the **tail** Unix command with the -f option.
+The **JobQueue** class is a generator that will update a job's status to 'working' and then 'done' once the worker has completed it's task.
 #### Jobs
 Jobs are added to the queue in the following structure:
 ```python
 {
-    'created': datetime,
-    'started': datetime,
-    'done': datetime,
+    'ts': {
+        'created': datetime,
+        'started': datetime,
+        'done': datetime
+    },
     'status': 'string',
     'site': 'string',
     'data': {
@@ -22,10 +24,13 @@ Jobs are added to the queue in the following structure:
     }
 }
 ```
-In the `data` dict the `JobQueue.pub` method will add whatever info your job needs. When running the job queue with a worker, the job queue will return a similar looking job that holds your specified data.
+In the `data` dict the `JobQueue.pub()` method will add whatever info your job needs. When running the job queue with a worker, the job queue will return a similar looking job that holds your specified data.
 
 
 ### Useage
+
+##### Basic Use
+
 ```python
 from pymongo import MongoClient
 from jobqueue import JobQueue
