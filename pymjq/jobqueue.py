@@ -1,7 +1,5 @@
-from pymongo.cursor import _QUERY_OPTIONS
 import pymongo
 from datetime import datetime
-import bson
 import time
 
 class JobQueue:
