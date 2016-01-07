@@ -42,7 +42,8 @@ Examples
     ...
     ---
     Working on job:
-    {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'), u'data': {u'message': u'hello world!'}, u'ts': {u'started': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'done': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'created': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000)}}
+    {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'),
+      u'data': {u'message': u'hello world!'}...
     hello world!
     waiting!
     waiting!
@@ -59,7 +60,8 @@ Examples
     >>> print (j["data"]["message"])
     hello again!
     print (j)
-    {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'), u'data': {u'message': u'hello world!'}, u'ts': {u'started': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'done': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'created': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000)}}
+    {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'),
+      u'data': {u'message': u'hello again!'}...
     >>>
 
 How It Works
