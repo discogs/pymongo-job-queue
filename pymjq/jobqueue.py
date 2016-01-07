@@ -16,12 +16,12 @@ class JobQueue:
             self._create()
         self.q = self.db['jobqueue']
 
-    def _create(self):
+    def _create(self, capped=True):
         """ Creates a Capped Collection. """
         # TODO - does the size parameter mean number of docs or bytesize?
         try:
             self.db.create_collection('jobqueue',
-                                      capped=True, max=100000,
+                                      capped=capped, max=100000,
                                       size=100000, autoIndexId=True)
         except:
             raise Exception('Collection "jobqueue" already created')

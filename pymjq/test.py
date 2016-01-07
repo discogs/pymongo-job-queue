@@ -21,6 +21,14 @@ class TestJobQueue(unittest.TestCase):
         self.assertRaises(Exception, jq._create)
         jq.clear_queue()
 
+    def test_valid(self):
+        jq = JobQueue(self.db)
+        jq.db['jobqueue'].drop()
+        jq._create(capped=False)
+        self.assertFalse(jq.valid())
+        self.assertRaises(Exception, jq._create)
+        jq.clear_queue()
+
     def test_publish(self):
         jq = JobQueue(self.db)
         job = {'message': 'hello world!'}
