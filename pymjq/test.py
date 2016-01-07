@@ -18,6 +18,7 @@ class TestJobQueue(unittest.TestCase):
     def test_init(self):
         jq = JobQueue(self.db)
         self.assertTrue(jq.valid())
+        self.assertRaises(Exception, jq._create)
         jq.clear_queue()
 
     def test_publish(self):
@@ -29,6 +30,7 @@ class TestJobQueue(unittest.TestCase):
 
     def test_next(self):
         jq = JobQueue(self.db)
+        self.assertRaises(Exception, jq.next)
         job = {'message': 'hello world!'}
         jq.pub(job)
         row = jq.next()

@@ -24,7 +24,7 @@ class JobQueue:
                                       capped=True, max=100000,
                                       size=100000, autoIndexId=True)
         except:
-            print ('Collection "jobqueue" already created')
+            raise Exception('Collection "jobqueue" already created')
 
     def _exists(self):
         """ Ensures that the jobqueue collection exists in the DB. """
