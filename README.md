@@ -6,6 +6,12 @@ This is currently used to send notifications on the Meta sites (a.k.a. Vinylhub,
 #### Dependencies
 * pymongo 2.7.2
 
+### Install
+
+```
+$ pip install pymjq
+```
+
 ### Examples
 
 ```
@@ -26,7 +32,7 @@ True
 ---
 Working on job:
 {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'), u'data': {u'message': u'hello world!'}, u'ts': {u'started': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'done': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'created': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000)}}
-
+hello world!
 waiting!
 waiting!
 waiting!
