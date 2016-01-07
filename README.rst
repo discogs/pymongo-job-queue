@@ -1,5 +1,5 @@
-pymongo-job-queue |travis build| |Codecov|
-==========================================
+pymongo-job-queue |travis build| |Codecov| |version|
+====================================================
 
 This package (``pymjq``) is a simple MongoDB based job queue for Python.
 By using capped collections and tailable cursors, you can queue up data
@@ -10,12 +10,19 @@ This is currently used to send notifications on the Meta sites (a.k.a.
 Vinylhub, Bibliogs, Filmogs, Gearogs, Comicogs and the Reference Wiki).
 
 Dependencies
-------------
+^^^^^^^^^^^^
 
 -  pymongo 2.7.2
 
+Install
+~~~~~~~
+
+::
+
+    $ pip install pymjq
+
 Examples
---------
+~~~~~~~~
 
 ::
 
@@ -36,7 +43,7 @@ Examples
     ---
     Working on job:
     {u'status': u'waiting', u'_id': ObjectId('568d963d2c69a1e3ef34da84'), u'data': {u'message': u'hello world!'}, u'ts': {u'started': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'done': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000), u'created': datetime.datetime(2016, 1, 6, 14, 33, 33, 554000)}}
-
+    hello world!
     waiting!
     waiting!
     waiting!
@@ -56,7 +63,7 @@ Examples
     >>>
 
 How It Works
-------------
+~~~~~~~~~~~~
 
 -  `Capped
    collections <http://docs.mongodb.org/manual/core/capped-collections/>`__
@@ -71,7 +78,7 @@ How It Works
    then 'done' once the worker has completed it's task.
 
 Jobs
-~~~~
+^^^^
 
 Job document, when added to the queue, has the following structure:
 
@@ -94,7 +101,7 @@ data you pass as a parameter. The ``ts`` attributes will be updated as
 the document is worked on.
 
 License
--------
+~~~~~~~
 
 MIT Copyright (c) 2016 Discogs
 
@@ -102,3 +109,5 @@ MIT Copyright (c) 2016 Discogs
    :target: https://travis-ci.org/discogs/pymongo-job-queue
 .. |Codecov| image:: https://img.shields.io/codecov/c/github/discogs/pymongo-job-queue.svg
    :target: https://codecov.io/github/discogs/pymongo-job-queue
+.. |version| image:: https://img.shields.io/pypi/v/pymjq.svg
+   :target: https://pypi.python.org/pypi/pymjq
