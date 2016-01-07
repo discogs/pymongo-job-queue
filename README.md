@@ -38,9 +38,6 @@ hello world!
 waiting!
 waiting!
 waiting!
-waiting!
-waiting!
-waiting!
 ...
 ^C Keyboard Interrupt
 >>> jobqueue.pub({"message": "hello again!"}) # add another job to queue
@@ -87,4 +84,5 @@ In the `data` field, the `JobQueue.pub()` method will add whatever data you pass
 Want to hack on this? Check out the "Submitting a Change" section in the [CONTRIBUTING](https://github.com/discogs/pymongo-job-queue/blob/master/CONTRIBUTING.md) doc.
 
 ### License
-MIT Copyright (c) 2016 Discogs
+
+[MIT](https://github.com/discogs/pymongo-job-queue/blob/master/LICENSE) Copyright (c) 2016 Discogs
