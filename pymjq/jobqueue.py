@@ -72,28 +72,22 @@ class JobQueue:
         while 1:
             try:
                 row = cursor.next()
-                self._work(row)
+                try:
+                    result = self.q.update({'_id': row['_id'],'status':'waiting'},
+                    {'$set':{'status':'working', 'ts.started':datetime.now()}})
+                except OperationFailure:
+                    print ('Job Failed!!')
+                    continue
+                print ('---')
+                print ('Working on job:')
+                print row
+                yield row
+                row['status'] = 'done'
+                row['ts']['done'] =  datetime.now()
+                self.q.save(row)
             except:
                 time.sleep(5)
                 print ('waiting!')
-
-    def _work(self, doc):
-        """  Sets the doc status to working and yields the doc  """
-        try:
-            result = self.q.update({'_id': doc['_id'],'status':'waiting'},
-                {'$set':{'status':'working', 'ts.started':datetime.now()}})
-
-        except OperationFailure:
-            print ('Job Failed!!')
-
-        print ('---')
-        print ('Working on job:')
-        print doc
-        yield doc
-
-        row['status'] = 'done'
-        row['ts']['done'] =  datetime.now()
-        self.q.save(row)
 
     def queue_count(self):
         """ Returns the number of jobs waiting in the queue. """
