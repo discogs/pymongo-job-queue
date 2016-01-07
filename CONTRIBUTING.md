@@ -18,7 +18,7 @@ Please write clear/coherent messages for your commits:
 
 ### Testing
 
-We strongly encourage anyone submitting code to the project top also include tests. We currently have written unit tests in `test.py`. If you have a better idea, please feel free to open an issue and discuss.
+Anyone submitting code to the project is strongly encouraged to also include tests. We currently have written unit tests in `test.py`. If you have a better idea, please feel free to open an issue and discuss.
 
 ## Coding Conventions
 

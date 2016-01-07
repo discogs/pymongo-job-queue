@@ -82,5 +82,9 @@ Job document, when added to the queue, has the following structure:
 ```
 In the `data` field, the `JobQueue.pub()` method will add whatever data you pass as a parameter. The `ts` attributes will be updated as the document is worked on.
 
+## Contributing
+
+Want to hack on this? Check out the "Submitting a Change" section in the [CONTRIBUTING](https://github.com/discogs/pymongo-job-queue/blob/master/CONTRIBUTING.md) doc.
+
 ### License
 MIT Copyright (c) 2016 Discogs
