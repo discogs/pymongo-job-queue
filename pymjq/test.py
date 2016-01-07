@@ -35,6 +35,8 @@ class TestJobQueue(unittest.TestCase):
         jq.pub(job)
         self.assertEquals(jq.queue_count(), 1)
         jq.clear_queue()
+        jq.q = None  # erase the queue
+        self.assertRaises(Exception, jq.pub, job)
 
     def test_next(self):
         jq = JobQueue(self.db)
