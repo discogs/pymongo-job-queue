@@ -2,6 +2,7 @@ import pymongo
 from datetime import datetime
 import time
 
+
 class JobQueue:
 
     def __init__(self, db):
@@ -38,8 +39,8 @@ class JobQueue:
 
     def next(self):
         """ Runs the next job in the queue. """
-        cursor = self.q.find({'status':'waiting'},
-                              tailable=True)
+        cursor = self.q.find({'status': 'waiting'},
+                             tailable=True)
         if cursor:
             row = cursor.next()
             row['status'] = 'done'
@@ -54,11 +55,11 @@ class JobQueue:
     def pub(self, data=None):
         """ Publishes a doc to the work queue. """
         doc = dict(
-            ts = { 'created': datetime.now(),
-                   'started': datetime.now(),
-                   'done':datetime.now() },
-            status = 'waiting',
-            data = data)
+            ts={'created': datetime.now(),
+                'started': datetime.now(),
+                'done': datetime.now()},
+            status='waiting',
+            data=data)
         try:
             self.q.insert(doc, manipulate=False)
         except:
@@ -68,22 +69,26 @@ class JobQueue:
     def __iter__(self):
         """ Iterates through all docs in the queue
             andw aits for new jobs when queue is empty. """
-        cursor = self.q.find({'status':'waiting'}, tailable=True)
+        cursor = self.q.find({'status': 'waiting'}, tailable=True)
         while 1:
             try:
                 row = cursor.next()
                 try:
-                    result = self.q.update({'_id': row['_id'],'status':'waiting'},
-                    {'$set':{'status':'working', 'ts.started':datetime.now()}})
+                    result = self.q.update({'_id': row['_id'],
+                                            'status': 'waiting'},
+                                           {'$set': {
+                                                'status': 'working',
+                                                'ts.started': datetime.now()
+                                                }
+                                            })
                 except OperationFailure:
                     print ('Job Failed!!')
                     continue
                 print ('---')
                 print ('Working on job:')
-                print row
                 yield row
                 row['status'] = 'done'
-                row['ts']['done'] =  datetime.now()
+                row['ts']['done'] = datetime.now()
                 self.q.save(row)
             except:
                 time.sleep(5)
@@ -91,7 +96,7 @@ class JobQueue:
 
     def queue_count(self):
         """ Returns the number of jobs waiting in the queue. """
-        cursor = self.q.find({'status':'waiting'})
+        cursor = self.q.find({'status': 'waiting'})
         if cursor:
             return cursor.count()
 

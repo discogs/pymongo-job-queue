@@ -1,4 +1,4 @@
-"""Creates a queue, adds and iterates through docs and waits when queue is empty."""
+"""MongoDB based message queue using pymongo"""
 
 __version__ = '1.1.0'
 __url__ = 'https://github.com/discogs/pymongo-job-queue'

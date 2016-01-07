@@ -6,6 +6,7 @@ host = 'localhost'
 port = 27017
 pair = '%s:%d' % (host, port)
 
+
 class TestJobQueue(unittest.TestCase):
 
     @classmethod
