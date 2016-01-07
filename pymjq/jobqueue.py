@@ -12,12 +12,12 @@ class JobQueue:
         since we use one jobqueue collection to cover all
         sites in an installation/database. """
         self.db = db
-        if not self.exists():
+        if not self._exists():
             print ('Creating jobqueue collection.')
-            self.create()
+            self._create()
         self.q = self.db['jobqueue']
 
-    def create(self):
+    def _create(self):
         """ Creates a Capped Collection. """
         # TODO - does the size parameter mean number of docs or bytesize?
         try:
@@ -27,7 +27,7 @@ class JobQueue:
         except:
             print ('Collection "jobqueue" already created')
 
-    def exists(self):
+    def _exists(self):
         """ Ensures that the jobqueue collection exists in the DB. """
         return 'jobqueue' in self.db.collection_names()
 
@@ -53,16 +53,6 @@ class JobQueue:
             except:
                 raise Exception('There are no jobs in the queue')
 
-    def queue_count(self):
-        """ Returns the number of jobs waiting in the queue. """
-        cursor = self.q.find({'status':'waiting'})
-        if cursor:
-            return cursor.count()
-
-    def clear_queue(self):
-        """ Drops the queue collection. """
-        self.q.drop()
-
     def pub(self, data=None):
         """ Publishes a doc to the work queue. """
         doc = dict(
@@ -78,31 +68,41 @@ class JobQueue:
         return True
 
     def __iter__(self):
+        """ Iterates through all docs in the queue
+            andw aits for new jobs when queue is empty. """
         cursor = self.q.find({'status':'waiting'}, tailable=True)
-
         while 1:
             try:
                 row = cursor.next()
-                try:
-                    result = self.q.update({'_id': row['_id'],'status':'waiting'},
-                                                    {'$set':{'status':'working',
-                                                    'ts.started':datetime.now()}} )
-                    print result
-                except OperationFailure:
-                    print ('Job Failed!!')
-                    continue
-
-
-                print ('---')
-                print ('Working on job:')
-                print row
-
-                yield row
-
-                row['status'] = 'done'
-                row['ts']['done'] =  datetime.now()
-                self.q.save(row)
-
+                self._work(row)
             except:
                 time.sleep(5)
                 print ('waiting!')
+
+    def _work(self, doc):
+        """  Sets the doc status to working and yields the doc  """
+        try:
+            result = self.q.update({'_id': doc['_id'],'status':'waiting'},
+                {'$set':{'status':'working', 'ts.started':datetime.now()}})
+
+        except OperationFailure:
+            print ('Job Failed!!')
+
+        print ('---')
+        print ('Working on job:')
+        print doc
+        yield doc
+
+        row['status'] = 'done'
+        row['ts']['done'] =  datetime.now()
+        self.q.save(row)
+
+    def queue_count(self):
+        """ Returns the number of jobs waiting in the queue. """
+        cursor = self.q.find({'status':'waiting'})
+        if cursor:
+            return cursor.count()
+
+    def clear_queue(self):
+        """ Drops the queue collection. """
+        self.q.drop()
