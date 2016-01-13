@@ -72,7 +72,6 @@ Job document, when added to the queue, has the following structure:
         'done': datetime
     },
     'status': 'string',
-    'site': 'string',
     'data': 'Your job data goes here! Define whatever structure you want. ''
 }
 
