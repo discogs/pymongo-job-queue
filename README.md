@@ -5,7 +5,9 @@ This package (`pymjq`) is a simple MongoDB based job queue for Python. By using 
 This is currently used to send notifications on the Meta sites (a.k.a. Vinylhub, Bibliogs, Filmogs, Gearogs, Comicogs and the Reference Wiki).
 
 #### Dependencies
+* mongodb 2.6
 * pymongo 2.7.2
+* python 2.7
 
 ### Install
 
