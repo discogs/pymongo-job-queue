@@ -7,6 +7,5 @@ install: "pip install -r requirements.txt"
 # # command to run tests
 script:
   - coverage run pymjq/test.py
-  - coverage combine
-#  - coverage report --omit '/home/travis/virtualenv/python2.7.9/*'
+
 after_success: codecov
