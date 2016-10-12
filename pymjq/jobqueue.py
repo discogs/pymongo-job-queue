@@ -5,12 +5,13 @@ import time
 
 class JobQueue:
 
-    def __init__(self, db):
+    def __init__(self, db, silent=False):
         """ Return an instance of a JobQueue.
         Initialization requires one argument, the database,
         since we use one jobqueue collection to cover all
         sites in an installation/database. """
         self.db = db
+        self.silent=silent
         if not self._exists():
             print ('Creating jobqueue collection.')
             self._create()
@@ -92,7 +93,8 @@ class JobQueue:
                 self.q.save(row)
             except:
                 time.sleep(5)
-                print ('waiting!')
+                if not self.silent:
+                    print ('waiting!')
 
     def queue_count(self):
         """ Returns the number of jobs waiting in the queue. """
