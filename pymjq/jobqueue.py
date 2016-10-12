@@ -9,7 +9,9 @@ class JobQueue:
         """ Return an instance of a JobQueue.
         Initialization requires one argument, the database,
         since we use one jobqueue collection to cover all
-        sites in an installation/database. """
+        sites in an installation/database. The second 
+        argument specifies if to print status while waiting
+        for new job, the default value is False"""
         self.db = db
         self.silent=silent
         if not self._exists():
