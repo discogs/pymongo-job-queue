@@ -15,6 +15,9 @@ class TestJobQueue(unittest.TestCase):
         client.pymongo_test.jobqueue.drop()
         cls.db = client.pymongo_test
 
+    def tearDown(self):
+        self.db['jobqueue'].drop()
+
     def test_init(self):
         jq = JobQueue(self.db)
         self.assertTrue(jq.valid())
