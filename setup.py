@@ -11,14 +11,14 @@ from os import path
 setup(
   name = 'pymjq',
   packages = ['pymjq'], # this must be the same as the name above
-  version = '1.1.0',
+  version = '1.2.0',
   description = 'Simple MongoDB based job queue',
   # long_description=long_description,
   license = 'MIT',
   author = 'Andy Craze',
   author_email = 'acraze@discogsinc.com',
   url = 'https://github.com/discogs/pymongo-job-queue', # use the URL to the github repo
-  download_url = 'https://github.com/discogs/pymongo-job-queue/tarball/1.1.0',
+  download_url = 'https://github.com/discogs/pymongo-job-queue/tarball/1.2.0',
   keywords = ['queue', 'pymongo', 'mongodb', 'job', 'async', 'worker', 'tail'], # arbitrary keywords
   classifiers = [
     # Indicate who the project is intended for
